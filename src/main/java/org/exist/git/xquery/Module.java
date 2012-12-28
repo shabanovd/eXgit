@@ -24,6 +24,8 @@ package org.exist.git.xquery;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.storage.file.EXistRepositoryBuilder;
 import org.exist.dom.QName;
 import org.exist.xquery.AbstractInternalModule;
 import org.exist.xquery.FunctionDef;
@@ -41,6 +43,10 @@ public class Module extends AbstractInternalModule {
 	public final static String PREFIX = "git";
 	private final static String RELEASED_IN_VERSION = "eXist-2.0";
 	private final static String DESCRIPTION = "Module for interacting with the git repository.";
+	
+	static {
+		Git.setRepositoryBuilder(new EXistRepositoryBuilder());
+	}
 
     public static ErrorCode EXGIT001 = new DebugErrorCode("EXGIT001", "Git command error.");
 

@@ -21,11 +21,10 @@
  */
 package org.exist.git.xquery;
 
-import java.io.File;
-
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -89,11 +88,12 @@ public class Clone extends BasicFunction {
                        args[3].getStringValue()
                    )
                )
-	           .setDirectory(new File(args[1].getStringValue()))
+	           .setDirectory(new Resource(args[1].getStringValue()))
 	           .call(); 
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
+			e.printStackTrace();
 			throw new XPathException(this, Module.EXGIT001, e);
 		}
 	}
