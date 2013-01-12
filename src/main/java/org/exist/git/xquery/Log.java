@@ -25,11 +25,11 @@ import java.io.File;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.PersonIdent;
-import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 import org.xml.sax.helpers.AttributesImpl;
@@ -74,8 +74,10 @@ public class Log extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Repository localRepo = new FileRepository(localPath + ".git");
-	        Git git = new Git(localRepo); 
+//	        Repository localRepo = new FileRepository(localPath + ".git");
+//	        Git git = new Git(localRepo);
+	        
+	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
 
             MemTreeBuilder builder = context.getDocumentBuilder();
 

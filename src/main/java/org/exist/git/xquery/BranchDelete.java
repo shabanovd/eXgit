@@ -24,9 +24,9 @@ package org.exist.git.xquery;
 import java.io.File;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -38,7 +38,7 @@ public class BranchDelete extends BasicFunction {
 
 	public final static FunctionSignature signatures[] = { 
 		new FunctionSignature(
-			new QName("branch-create", Module.NAMESPACE_URI, Module.PREFIX), 
+			new QName("branch-delete", Module.NAMESPACE_URI, Module.PREFIX), 
 			"", 
 			new SequenceType[] { 
                 new FunctionParameterSequenceType(
@@ -74,8 +74,7 @@ public class BranchDelete extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Repository localRepo = new FileRepository(localPath + ".git");
-	        Git git = new Git(localRepo); 
+	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
 		    
 	        git.branchDelete()
 	            .setBranchNames(args[1].getStringValue())

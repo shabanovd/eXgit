@@ -25,9 +25,10 @@ import java.io.File;
 
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Constants;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -66,6 +67,29 @@ public class BranchCreate extends BasicFunction {
 				Cardinality.EXACTLY_ONE, 
 				"true if success, false otherwise"
 			)
+		),
+		new FunctionSignature(
+			new QName("branch-create", Module.NAMESPACE_URI, Module.PREFIX), 
+			"", 
+			new SequenceType[] { 
+                new FunctionParameterSequenceType(
+                    "localPath", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "Local path"
+                ),
+                new FunctionParameterSequenceType(
+                    "branch-name", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "The name of the branch"
+                )
+			}, 
+			new FunctionReturnSequenceType(
+				Type.BOOLEAN, 
+				Cardinality.EXACTLY_ONE, 
+				"true if success, false otherwise"
+			)
 		)
 	};
 
@@ -81,12 +105,11 @@ public class BranchCreate extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Repository localRepo = new FileRepository(localPath + ".git");
-	        Git git = new Git(localRepo); 
+	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
 		    
 	        git.branchCreate()
 	            .setName(args[1].getStringValue())
-	            .setStartPoint(args[2].getStringValue())
+	            .setStartPoint(args.length <= 2 || args[2].isEmpty() ? Constants.HEAD : args[2].getStringValue())
                 .setUpstreamMode(SetupUpstreamMode.SET_UPSTREAM)
 	            .setForce(true)
 	            .call();

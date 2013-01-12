@@ -24,9 +24,9 @@ package org.exist.git.xquery;
 import java.io.File;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -80,8 +80,7 @@ public class BranchRename extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Repository localRepo = new FileRepository(localPath + ".git");
-	        Git git = new Git(localRepo); 
+	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
 		    
 	        git.branchRename()
                 .setOldName(args[1].getStringValue())

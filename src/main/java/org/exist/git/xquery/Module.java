@@ -71,6 +71,8 @@ public class Module extends AbstractInternalModule {
         new FunctionDef(Pull.signatures[0], Pull.class),
         
         new FunctionDef(BranchCreate.signatures[0], BranchCreate.class),
+        new FunctionDef(BranchCreate.signatures[1], BranchCreate.class),
+
         new FunctionDef(BranchDelete.signatures[0], BranchDelete.class),
         new FunctionDef(BranchList.signatures[0], BranchList.class),
         new FunctionDef(BranchRename.signatures[0], BranchRename.class),
