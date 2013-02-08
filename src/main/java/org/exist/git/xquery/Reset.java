@@ -25,9 +25,9 @@ import java.io.File;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ResetCommand.ResetType;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -71,7 +71,7 @@ public class Reset extends BasicFunction {
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 	    ResetType type;
 	    
-	    String sType = args[0].getStringValue();
+	    String sType = args[1].getStringValue();
 	    if ("HARD".equalsIgnoreCase(sType)) {
 	        type = ResetType.HARD;
 	    } else if ("SOFT".equalsIgnoreCase(sType)) {
@@ -87,8 +87,7 @@ public class Reset extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Repository localRepo = new FileRepository(localPath + ".git");
-	        Git git = new Git(localRepo);
+	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
 		    
 	        git.reset()
 	            .setMode(type)

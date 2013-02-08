@@ -24,8 +24,10 @@ package org.exist.git.xquery;
 import java.io.File;
 
 import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.storage.file.FileRepository;
+import org.eclipse.jgit.lib.RepositoryBuilder;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
+import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -67,7 +69,12 @@ public class Create extends BasicFunction {
 		    if (!(localPath.endsWith("/")))
 		        localPath += File.separator;
 		    
-	        Repository newRepo = new FileRepository(localPath + ".git");
+		    Repository newRepo = new RepositoryBuilder()
+		    .setFS(new FS_eXistdb())
+		    .setGitDir(new Resource(localPath + ".git"))
+			.setMustExist(false)
+			.build();
+		    
 	        newRepo.create();
 
 	        return BooleanValue.TRUE;

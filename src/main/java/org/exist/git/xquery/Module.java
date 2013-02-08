@@ -66,6 +66,8 @@ public class Module extends AbstractInternalModule {
 
         new FunctionDef(Checkout.signatures[0], Checkout.class),
         new FunctionDef(Merge.signatures[0], Merge.class),
+        
+        new FunctionDef(Diff.signatures[0], Diff.class),
 
         new FunctionDef(Push.signatures[0], Push.class),
         new FunctionDef(Pull.signatures[0], Pull.class),
@@ -80,8 +82,18 @@ public class Module extends AbstractInternalModule {
         new FunctionDef(Log.signatures[0], Log.class),
         //new FunctionDef(Diff.signatures[0], Create.class),
 
-		new FunctionDef(Reset.signatures[0], Reset.class)
-	};
+		new FunctionDef(Reset.signatures[0], Reset.class),
+
+        new FunctionDef(Status.signatures[0], Status.class),
+        new FunctionDef(Status.signatures[1], Status.class),
+        new FunctionDef(Status.signatures[2], Status.class),
+        new FunctionDef(Status.signatures[3], Status.class),
+        new FunctionDef(Status.signatures[4], Status.class),
+        new FunctionDef(Status.signatures[5], Status.class),
+        new FunctionDef(Status.signatures[6], Status.class),
+        new FunctionDef(Status.signatures[7], Status.class),
+        new FunctionDef(Status.signatures[8], Status.class)
+    };
 
 	public Module(Map<String, List<? extends Object>> parameters) {
 		super(functions, parameters);
