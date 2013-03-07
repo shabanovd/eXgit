@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@ import java.util.Map;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.EXistRepositoryBuilder;
+import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
 import org.exist.xquery.AbstractInternalModule;
 import org.exist.xquery.FunctionDef;
@@ -47,6 +48,8 @@ public class Module extends AbstractInternalModule {
 	static {
 		Git.setRepositoryBuilder(new EXistRepositoryBuilder());
 	}
+	
+	public static FS_eXistdb FS = new FS_eXistdb();
 
     public static ErrorCode EXGIT001 = new DebugErrorCode("EXGIT001", "Git command error.");
 
@@ -99,22 +102,22 @@ public class Module extends AbstractInternalModule {
 		super(functions, parameters);
 	}
 
-	@Override
+//	@Override
 	public String getNamespaceURI() {
 		return NAMESPACE_URI;
 	}
 
-	@Override
+//	@Override
 	public String getDefaultPrefix() {
 		return PREFIX;
 	}
 
-	@Override
+//	@Override
 	public String getDescription() {
 		return DESCRIPTION;
 	}
 
-	@Override
+//	@Override
 	public String getReleaseVersion() {
 		return RELEASED_IN_VERSION;
 	}

@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -21,11 +21,12 @@
  */
 package org.exist.git.xquery;
 
+import static org.exist.git.xquery.Module.FS;
+
 import java.io.File;
 
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.RepositoryBuilder;
-import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
 import org.exist.xquery.*;
@@ -70,7 +71,7 @@ public class Create extends BasicFunction {
 		        localPath += File.separator;
 		    
 		    Repository newRepo = new RepositoryBuilder()
-		    .setFS(new FS_eXistdb())
+		    .setFS(FS)
 		    .setGitDir(new Resource(localPath + ".git"))
 			.setMustExist(false)
 			.build();

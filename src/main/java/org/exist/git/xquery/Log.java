@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -21,20 +21,20 @@
  */
 package org.exist.git.xquery;
 
+import static org.exist.git.xquery.Module.*;
+
 import java.io.File;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.PersonIdent;
 import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.util.FS_eXistdb;
+
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 import org.xml.sax.helpers.AttributesImpl;
-
-import static org.exist.git.xquery.Module.*;
 
 /**
  * 
@@ -77,7 +77,7 @@ public class Log extends BasicFunction {
 //	        Repository localRepo = new FileRepository(localPath + ".git");
 //	        Git git = new Git(localRepo);
 	        
-	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
+	        Git git = Git.open(new Resource(localPath), FS);
 
             MemTreeBuilder builder = context.getDocumentBuilder();
 

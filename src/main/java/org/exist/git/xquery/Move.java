@@ -21,13 +21,9 @@
  */
 package org.exist.git.xquery;
 
-import static org.exist.git.xquery.Module.FS;
-
 import java.io.File;
 
-import org.eclipse.jgit.api.Git;
 import org.exist.dom.QName;
-import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -35,11 +31,11 @@ import org.exist.xquery.value.*;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class BranchDelete extends BasicFunction {
+public class Move extends BasicFunction {
 
 	public final static FunctionSignature signatures[] = { 
 		new FunctionSignature(
-			new QName("branch-delete", Module.NAMESPACE_URI, Module.PREFIX), 
+			new QName("move", Module.NAMESPACE_URI, Module.PREFIX), 
 			"", 
 			new SequenceType[] { 
                 new FunctionParameterSequenceType(
@@ -49,10 +45,16 @@ public class BranchDelete extends BasicFunction {
                     "Local path"
                 ),
                 new FunctionParameterSequenceType(
-                    "branch-name", 
+                    "From path", 
                     Type.STRING, 
                     Cardinality.EXACTLY_ONE, 
-                    "The name of the branch"
+                    "File path"
+                ),
+                new FunctionParameterSequenceType(
+                    "To path", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "File path"
                 )
 			}, 
 			new FunctionReturnSequenceType(
@@ -63,7 +65,7 @@ public class BranchDelete extends BasicFunction {
 		)
 	};
 
-	public BranchDelete(XQueryContext context, FunctionSignature signature) {
+	public Move(XQueryContext context, FunctionSignature signature) {
 		super(context, signature);
 	}
 
@@ -75,13 +77,13 @@ public class BranchDelete extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Git git = Git.open(new Resource(localPath), FS);
-		    
-	        git.branchDelete()
-	            .setBranchNames(args[1].getStringValue())
-	            .call();
+//	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
+//	        Repository repository = git.getRepository();
+	        
+	        //XXX: code
+	        return BooleanValue.FALSE;
 
-	        return BooleanValue.TRUE;
+//	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
 			throw new XPathException(this, Module.EXGIT001, e);
 		}

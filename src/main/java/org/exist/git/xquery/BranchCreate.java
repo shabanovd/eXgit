@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -21,12 +21,13 @@
  */
 package org.exist.git.xquery;
 
+import static org.exist.git.xquery.Module.FS;
+
 import java.io.File;
 
 import org.eclipse.jgit.api.CreateBranchCommand.SetupUpstreamMode;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Constants;
-import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
 import org.exist.xquery.*;
@@ -105,7 +106,7 @@ public class BranchCreate extends BasicFunction {
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
 
-	        Git git = Git.open(new Resource(localPath), new FS_eXistdb());
+	        Git git = Git.open(new Resource(localPath), FS);
 		    
 	        git.branchCreate()
 	            .setName(args[1].getStringValue())

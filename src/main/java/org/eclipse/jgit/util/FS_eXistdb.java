@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -30,16 +30,62 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 
 import org.eclipse.jgit.util.FS;
+import org.exist.Database;
+import org.exist.collections.Collection;
+import org.exist.storage.BrokerPool;
+import org.exist.storage.DBBroker;
+import org.exist.util.Configuration;
 import org.exist.util.io.Resource;
 import org.exist.util.io.ResourceInputStream;
 import org.exist.util.io.ResourceOutputStream;
 import org.exist.util.io.ResourceRandomAccess;
+import org.exist.xmldb.XmldbURI;
 
 /**
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  *
  */
 public class FS_eXistdb extends FS {
+	
+//	static {
+//		Transport.register(org.eclipse.jgit.transport.TransportEXist.PROTO_LOCAL);
+//	}
+	
+	public FS_eXistdb() {
+		String conFile = System.getProperty("eXistDB-config");
+		if (conFile != null) {
+			startDB(conFile);
+		}
+	}
+	
+    private void startDB(String file) {
+        try {
+            Configuration config = new Configuration(file);
+            BrokerPool.configure(1, 5, config);
+            Database db = BrokerPool.getInstance();
+            
+            DBBroker broker = db.get(db.getSecurityManager().getSystemSubject());
+            try {
+            	Collection root = broker.getCollection(XmldbURI.DB);
+            	root.getPermissions().setMode(0777);
+    			broker.saveCollection(null, root);
+
+            } finally {
+            	db.release(broker);
+            }
+            
+        } catch (Exception e) {
+        	e.printStackTrace();
+        }
+    }
+
+//    private void stopDB() {
+//    	try {
+//    		BrokerPool.stopAll(false);
+//        } catch (Exception e) {
+//        	e.printStackTrace();
+//        }
+//    }    
 
 	@Override
 	public FS newInstance() {
@@ -51,7 +97,7 @@ public class FS_eXistdb extends FS {
 	}
 
 	public File resolve(final File dir, final String name) {
-		System.out.println("FS_eXistdb "+dir+" ~ "+name);
+//		System.out.println("FS_eXistdb "+dir+" ~ "+name);
 		
 		final File abspn = new Resource(name);
 		if (abspn.isAbsolute())
@@ -71,14 +117,14 @@ public class FS_eXistdb extends FS {
 
 	@Override
 	public boolean canExecute(File f) {
-		// TODO Auto-generated method stub
-		return false;
+		return f.canExecute();
 	}
 
 	@Override
 	public boolean setExecute(File f, boolean canExec) {
-		// TODO Auto-generated method stub
-		return false;
+		f.setExecutable(canExec);
+
+		return true;
 	}
 
 	@Override
@@ -105,13 +151,13 @@ public class FS_eXistdb extends FS {
 	}
 
 	public FileOutputStream fileOutputStream(File file) throws FileNotFoundException {
-		System.out.println("fileOutputStream "+file);
+//		System.out.println("fileOutputStream "+file);
 		return new ResourceOutputStream((Resource)file);
 	}
 	
 	public FileOutputStream fileOutputStream(File file, boolean append)
 			throws FileNotFoundException {
-		System.out.println("fileOutputStream ("+append+") "+file);
+//		System.out.println("fileOutputStream ("+append+") "+file);
 		return new ResourceOutputStream((Resource)file, append);
 	}
 	
@@ -120,22 +166,21 @@ public class FS_eXistdb extends FS {
 	}
 	
 	public RandomAccessFile randomAccessFile(File file, String mode) throws FileNotFoundException {
-		System.out.println("randomAccessFile ("+mode+") "+file);
+//		System.out.println("randomAccessFile ("+mode+") "+file);
 		return new ResourceRandomAccess((Resource)file, mode);
 	}
 	
 	public FileInputStream fileInputStream(File file) throws FileNotFoundException {
-		System.out.println("fileInputStream "+file);
+//		System.out.println("fileInputStream "+file);
 		return new ResourceInputStream((Resource)file);
 	}
 
 	public BufferedReader getBufferedReader(File f) throws FileNotFoundException {
-		System.out.println("getBufferedReader "+f);
+//		System.out.println("getBufferedReader "+f);
 		try {
 			return ((Resource)f).getBufferedReader();
 		} catch (IOException e) {
 			throw new FileNotFoundException(e.getMessage());
 		}
 	}
-
 }

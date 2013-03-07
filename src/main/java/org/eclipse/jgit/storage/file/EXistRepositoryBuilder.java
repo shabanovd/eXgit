@@ -1,6 +1,6 @@
 /*
  *  eXist Open Source Native XML Database
- *  Copyright (C) 2012 The eXist Project
+ *  Copyright (C) 2012-2013 The eXist Project
  *  http://exist-db.org
  *
  *  This program is free software; you can redistribute it and/or
@@ -21,12 +21,13 @@
  */
 package org.eclipse.jgit.storage.file;
 
+import static org.exist.git.xquery.Module.FS;
+
 import java.io.File;
 import java.io.IOException;
 
 import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.eclipse.jgit.lib.BaseRepositoryBuilder;
-import org.eclipse.jgit.util.FS_eXistdb;
 import org.exist.util.io.Resource;
 
 /**
@@ -36,7 +37,7 @@ import org.exist.util.io.Resource;
 public class EXistRepositoryBuilder extends BaseRepositoryBuilder<EXistRepositoryBuilder, EXistRepository> {
 
 	public EXistRepositoryBuilder() {
-		setFS(new FS_eXistdb());
+		setFS(FS);
 	}
 	
     @Override

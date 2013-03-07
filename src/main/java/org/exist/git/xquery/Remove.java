@@ -35,11 +35,11 @@ import org.exist.xquery.value.*;
  * 
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
-public class BranchDelete extends BasicFunction {
+public class Remove extends BasicFunction {
 
 	public final static FunctionSignature signatures[] = { 
 		new FunctionSignature(
-			new QName("branch-delete", Module.NAMESPACE_URI, Module.PREFIX), 
+			new QName("rm", Module.NAMESPACE_URI, Module.PREFIX), 
 			"", 
 			new SequenceType[] { 
                 new FunctionParameterSequenceType(
@@ -49,10 +49,10 @@ public class BranchDelete extends BasicFunction {
                     "Local path"
                 ),
                 new FunctionParameterSequenceType(
-                    "branch-name", 
+                    "filepattern", 
                     Type.STRING, 
                     Cardinality.EXACTLY_ONE, 
-                    "The name of the branch"
+                    "File pattern"
                 )
 			}, 
 			new FunctionReturnSequenceType(
@@ -63,7 +63,7 @@ public class BranchDelete extends BasicFunction {
 		)
 	};
 
-	public BranchDelete(XQueryContext context, FunctionSignature signature) {
+	public Remove(XQueryContext context, FunctionSignature signature) {
 		super(context, signature);
 	}
 
@@ -76,10 +76,10 @@ public class BranchDelete extends BasicFunction {
                 localPath += File.separator;
 
 	        Git git = Git.open(new Resource(localPath), FS);
-		    
-	        git.branchDelete()
-	            .setBranchNames(args[1].getStringValue())
-	            .call();
+	        
+	        git.rm()
+	        	.addFilepattern(args[1].getStringValue())
+	        	.call();
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
