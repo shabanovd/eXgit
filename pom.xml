@@ -2,7 +2,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>org.exist-db</groupId>
   <artifactId>eXgit</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <version>0.1.M01-SNAPSHOT</version>
   
   <dependencies>
     <!-- Core Library -->
