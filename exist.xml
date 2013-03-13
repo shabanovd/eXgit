@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <package xmlns="http://exist-db.org/ns/expath-pkg">
-    <jar>org.exist-db.jgit-2.4.0.M01.jar</jar>
-    <jar>eXgit-0.1.M01.jar</jar>
+    <jar>existdb.jgit-2.4.0.M02.jar</jar>
+    <jar>eXgit-0.1.M02.jar</jar>
     <java>
         <namespace>http://exist-db.org/git</namespace>
         <class>org.exist.git.xquery.Module</class>

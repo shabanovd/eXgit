@@ -49,9 +49,9 @@ public class Module extends AbstractInternalModule {
 		Git.setRepositoryBuilder(new EXistRepositoryBuilder());
 	}
 	
-	public static FS_eXistdb FS = new FS_eXistdb();
+	public static final FS_eXistdb FS = new FS_eXistdb();
 
-    public static ErrorCode EXGIT001 = new DebugErrorCode("EXGIT001", "Git command error.");
+    public static final ErrorCode EXGIT001 = new DebugErrorCode("EXGIT001", "Git command error.");
 
     public static class DebugErrorCode extends ErrorCode {
         private DebugErrorCode(String code, String description) {

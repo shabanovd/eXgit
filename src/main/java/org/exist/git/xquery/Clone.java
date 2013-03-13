@@ -21,6 +21,8 @@
  */
 package org.exist.git.xquery;
 
+import static org.exist.git.xquery.Module.FS;
+
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 
@@ -81,7 +83,8 @@ public class Clone extends BasicFunction {
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 
 		try {
-	        Git.cloneRepository() 
+	        Git.cloneRepository()
+	           .setFS(FS)
 	           .setURI(args[0].getStringValue())
 	           .setCredentialsProvider(
                    new UsernamePasswordCredentialsProvider(
