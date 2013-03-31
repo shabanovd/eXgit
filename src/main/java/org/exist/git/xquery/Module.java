@@ -95,7 +95,8 @@ public class Module extends AbstractInternalModule {
         new FunctionDef(Status.signatures[5], Status.class),
         new FunctionDef(Status.signatures[6], Status.class),
         new FunctionDef(Status.signatures[7], Status.class),
-        new FunctionDef(Status.signatures[8], Status.class)
+        new FunctionDef(Status.signatures[8], Status.class),
+        new FunctionDef(Status.signatures[9], Status.class)
     };
 
 	public Module(Map<String, List<? extends Object>> parameters) {
