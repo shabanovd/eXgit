@@ -25,6 +25,7 @@ import static org.exist.git.xquery.Module.FS;
 
 import java.io.File;
 
+import org.eclipse.jgit.api.CommitCommand;
 import org.eclipse.jgit.api.Git;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
@@ -60,6 +61,35 @@ public class Commit extends BasicFunction {
 				Cardinality.EXACTLY_ONE, 
 				"true if success, false otherwise"
 			)
+		),
+		new FunctionSignature(
+			new QName("commit", Module.NAMESPACE_URI, Module.PREFIX), 
+			"", 
+			new SequenceType[] { 
+                new FunctionParameterSequenceType(
+                    "localPath", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "Local path"
+                ),
+                new FunctionParameterSequenceType(
+                    "message", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "Message"
+                ),
+                new FunctionParameterSequenceType(
+                    "files", 
+                    Type.STRING, 
+                    Cardinality.ZERO_OR_MORE, 
+                    "Files to commit"
+                )
+			}, 
+			new FunctionReturnSequenceType(
+				Type.BOOLEAN, 
+				Cardinality.EXACTLY_ONE, 
+				"true if success, false otherwise"
+			)
 		)
 	};
 
@@ -77,9 +107,18 @@ public class Commit extends BasicFunction {
 
 	        Git git = Git.open(new Resource(localPath), FS);
 		    
-	        git.commit()
-	           .setMessage(args[1].getStringValue())
-	           .call();
+	        CommitCommand command = git.commit()
+	           .setMessage(args[1].getStringValue());
+//	           .setAuthor(name, email)
+//	           .setCommitter(name, email)
+	        
+	        if (args.length >= 3) {
+		        for (int i = 0; i < args[2].getItemCount(); i++) {
+		        	command.setOnly(args[2].itemAt(i).getStringValue());
+		        }
+	        }
+//	        command.setAll(true);
+	        command.call();
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {

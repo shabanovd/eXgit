@@ -99,6 +99,12 @@ public class Status extends BasicFunction {
 	            Type.STRING, 
 	            Cardinality.EXACTLY_ONE, 
 	            "Repository path"
+	        ),
+	        new FunctionParameterSequenceType(
+	            "recursive", 
+	            Type.BOOLEAN, 
+	            Cardinality.EXACTLY_ONE, 
+	            "Recursive"
 	        )
 		};
 
@@ -183,7 +189,7 @@ public class Status extends BasicFunction {
 	            StatusBuilder statusBuilder = new StatusBuilder(builder);
 	            
 	            final Repository repo = git.getRepository();
-	            diff(repo, Constants.HEAD, new FileTreeIterator(repo), statusBuilder, args[1].getStringValue());
+	            diff(repo, Constants.HEAD, new FileTreeIterator(repo), statusBuilder, args[1].getStringValue(), args[2].effectiveBooleanValue());
 	        	
 	            builder.endElement();
 
@@ -353,7 +359,7 @@ public class Status extends BasicFunction {
 
 	public void diff(final Repository repository, 
 			final String revstr, final WorkingTreeIterator initialWorkingTreeIterator,
-			final StatusBuilder builder, final String folder)
+			final StatusBuilder builder, final String folder, boolean recursive)
 			throws IOException {
 
 		RevTree tree = null;
@@ -371,7 +377,7 @@ public class Status extends BasicFunction {
 
 		TreeWalk treeWalk = new TreeWalk(repository);
 //		TreeWalk treeWalk = TreeWalk.forPath(repository, folder, tree);
-		treeWalk.setRecursive(false);
+		treeWalk.setRecursive(recursive);
 		// add the trees (tree, dirchache, workdir)
 		if (tree != null)
 			treeWalk.addTree(tree);

@@ -64,7 +64,10 @@ public class Module extends AbstractInternalModule {
         new FunctionDef(Clone.signatures[0], Clone.class),
 
         new FunctionDef(Add.signatures[0], Add.class),
+
         new FunctionDef(Commit.signatures[0], Commit.class),
+        new FunctionDef(Commit.signatures[1], Commit.class),
+        
         new FunctionDef(Tag.signatures[0], Tag.class),
 
         new FunctionDef(Checkout.signatures[0], Checkout.class),

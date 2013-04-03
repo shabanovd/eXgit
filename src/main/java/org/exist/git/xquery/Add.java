@@ -25,6 +25,7 @@ import static org.exist.git.xquery.Module.FS;
 
 import java.io.File;
 
+import org.eclipse.jgit.api.AddCommand;
 import org.eclipse.jgit.api.Git;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
@@ -51,7 +52,7 @@ public class Add extends BasicFunction {
                 new FunctionParameterSequenceType(
                     "filepattern", 
                     Type.STRING, 
-                    Cardinality.EXACTLY_ONE, 
+                    Cardinality.ONE_OR_MORE, 
                     "File pattern"
                 )
 			}, 
@@ -77,9 +78,13 @@ public class Add extends BasicFunction {
 
 	        Git git = Git.open(new Resource(localPath), FS);
 		    
-	        git.add()
-	           .addFilepattern(args[1].getStringValue())
-	           .call();
+	        AddCommand command = git.add();
+	        
+	        for (int i = 0; i < args[1].getItemCount(); i++) {
+	        	command.addFilepattern(args[1].itemAt(i).getStringValue());
+	        }
+	        
+	        command.call();
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
