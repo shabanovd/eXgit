@@ -1,0 +1,38 @@
+<div xmlns="http://www.w3.org/1999/xhtml" class="templates:surround?with=templates/page.html&amp;at=content">
+    <div class="row-fluid">
+        <div class="hero-unit">
+            <h3>Authentication</h3>
+            <form action="security_check">
+                <div class="control-group">
+                    <label class="control-label" for="username">Username:</label>
+                    <div class="controls">
+                        <input id="username" name="username" type="text" required="required" placeholder="Username"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">Password:</label>
+                    <div class="controls">
+                        <input id="password" name="password" type="password" placeholder="Password"/>
+                    </div>
+                </div>
+                <button type="submit" id="signin-btn" class="btn btn-primary">Sign in</button>
+            </form>
+            <h3>Authentication by j_security_check</h3>
+            <form action="j_security_check">
+                <div class="control-group">
+                    <label class="control-label" for="username">Username:</label>
+                    <div class="controls">
+                        <input id="username" name="j_username" type="text" required="required" placeholder="Username"/>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <label class="control-label" for="password">Password:</label>
+                    <div class="controls">
+                        <input id="password" name="j_password" type="password" placeholder="Password"/>
+                    </div>
+                </div>
+                <button type="submit" id="signin-btn" class="btn btn-primary">Sign in</button>
+            </form>
+        </div>
+    </div>
+</div>
