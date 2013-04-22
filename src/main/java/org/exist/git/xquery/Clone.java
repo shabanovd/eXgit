@@ -83,7 +83,7 @@ public class Clone extends BasicFunction {
 	public Sequence eval(Sequence[] args, Sequence contextSequence) throws XPathException {
 
 		try {
-	        Git.cloneRepository()
+	        Git repo = Git.cloneRepository()
 	           .setFS(FS)
 	           .setURI(args[0].getStringValue())
 	           .setCredentialsProvider(
@@ -95,7 +95,11 @@ public class Clone extends BasicFunction {
 	           .setDirectory(new Resource(args[1].getStringValue()))
 	           .call(); 
 
-	        return BooleanValue.TRUE;
+	        if (repo != null)
+	        	return BooleanValue.TRUE;
+	        else
+	        	return BooleanValue.FALSE;
+	        
 		} catch (Throwable e) {
 			e.printStackTrace();
 			throw new XPathException(this, Module.EXGIT001, e);
