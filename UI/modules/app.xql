@@ -101,7 +101,7 @@ declare function app:repos($node as node(), $model as map(*)) {
                     <div class="control-group">
                         <label class="control-label" for="repo-clone-user">User:</label>
                         <div class="controls">
-                            <input class="input-xlarge" id="repo-clone-user" name="repo-user" type="text" required="required"/>
+                            <input class="input-xlarge" id="repo-clone-username" name="repo-username" type="text" required="required"/>
                         </div>
                     </div>
                     
@@ -124,7 +124,7 @@ declare function app:repos($node as node(), $model as map(*)) {
                     resizable: false,
                     buttons: {{
                         "Finish": function() {{
-                            eXgit.createRepository(
+                            eXgit.cloneRepository(
                                 $( "#repo-clone-URI" ).val(), 
                                 $( "#repo-clone-collection" ).val(), 
                                 $( "#repo-clone-username" ).val(), 
