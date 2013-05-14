@@ -26,6 +26,7 @@ import static org.exist.git.xquery.Module.FS;
 import java.io.File;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
 import org.exist.xquery.*;
@@ -47,6 +48,18 @@ public class Push extends BasicFunction {
                     Type.STRING, 
                     Cardinality.EXACTLY_ONE, 
                     "Local path"
+                ),
+                new FunctionParameterSequenceType(
+                    "username", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "Username"
+                ),
+                new FunctionParameterSequenceType(
+                    "password", 
+                    Type.STRING, 
+                    Cardinality.EXACTLY_ONE, 
+                    "Password"
                 )
 			}, 
 			new FunctionReturnSequenceType(
@@ -72,6 +85,12 @@ public class Push extends BasicFunction {
 	        Git git = Git.open(new Resource(localPath), FS);
 		    
 	        git.push()
+               .setCredentialsProvider(
+                   new UsernamePasswordCredentialsProvider(
+                       args[1].getStringValue(), 
+                       args[2].getStringValue()
+                   )
+               )
 	           .call();
 
 	        return BooleanValue.TRUE;
