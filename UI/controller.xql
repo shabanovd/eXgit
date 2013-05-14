@@ -28,6 +28,11 @@ if ($exist:resource eq "logout") then
 else if (contains($exist:path, "/api/")) then
 :)
 
+else if (contains($exist:path, "/$context-path")) then
+    <result>
+        {request:get-context-path()}
+    </result>
+    
 else if (contains($exist:path, "/$shared/")) then
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
         <forward url="/shared-resources/{substring-after($exist:path, '/$shared/')}">

@@ -4,7 +4,7 @@ module namespace app="eXgit/templates";
 
 declare namespace restxq="http://exquery.org/ns/restxq";
 
-import module namespace templates="http://exist-db.org/xquery/templates" ;
+(: import module namespace templates="http://exist-db.org/xquery/templates"; :)
 import module namespace config="eXgit/config" at "config.xqm";
 
 import module namespace git="http://exist-db.org/git";
@@ -108,7 +108,7 @@ declare function app:repos($node as node(), $model as map(*)) {
                     <div class="control-group">
                         <label class="control-label" for="repo-clone-password">Password:</label>
                         <div class="controls">
-                            <input class="input-xlarge" id="repo-clone-password" name="repo-clone-pssword" type="password" required="required"/>
+                            <input class="input-xlarge" id="repo-clone-password" name="repo-clone-password" type="password" required="required"/>
                         </div>
                     </div>
                 </fieldset>
@@ -202,7 +202,24 @@ declare %restxq:path("eXgit/repository/tools")
     <div class="btn-group"><!-- btn-toolbar -->
         <a class="btn btn-small" href="#" id="repo-push"><i class="icon-upload"></i> Push</a>
         <div id="repo-push-dialog" title="Push to Upstream">
-            <div>Push to ...</div>
+            <div>Push</div>
+            <fieldset>
+                <legend>Authentication</legend>
+                
+                <div class="control-group">
+                    <label class="control-label" for="repo-push-user">User:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" id="repo-push-username" name="repo-username" type="text" required="required"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="repo-push-password">Password:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" id="repo-push-password" name="repo-push-password" type="password" required="required"/>
+                    </div>
+                </div>
+            </fieldset>
         </div>
         <script>
             $(function() {{
@@ -214,13 +231,10 @@ declare %restxq:path("eXgit/repository/tools")
                     resizable: false,
                     buttons: {{
                         "Push": function() {{
-                            $.ajax({{
-                                url: "/restxq/eXgit/push?collection=" + eXgit.currentRepository,
-                                dataType: 'text',
-                                success: function (data, status, xhr) {{                            
-                                    $( "#repo-push-dialog" ).dialog( "close" );
-                                }}
-                            }});
+                            eXgit.push(
+                                $( "#repo-push-username" ).val(), 
+                                $( "#repo-push-password" ).val()
+                            );
                         }},
                         Cancel: function() {{
                             $( this ).dialog( "close" );
@@ -239,7 +253,24 @@ declare %restxq:path("eXgit/repository/tools")
         
         <a class="btn btn-small" href="#" id="repo-pull"><i class="icon-download"></i> Pull</a>
         <div id="repo-pull-dialog" title="Pull from Upstream">
-            <div>Push to ...</div>
+            <div>Pull</div>
+            <fieldset>
+                <legend>Authentication</legend>
+                
+                <div class="control-group">
+                    <label class="control-label" for="repo-pull-user">User:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" id="repo-pull-username" name="repo-username" type="text" required="required"/>
+                    </div>
+                </div>
+                
+                <div class="control-group">
+                    <label class="control-label" for="repo-pull-password">Password:</label>
+                    <div class="controls">
+                        <input class="input-xlarge" id="repo-pull-password" name="repo-pull-password" type="password" required="required"/>
+                    </div>
+                </div>
+            </fieldset>
         </div>
         <script>
             $(function() {{
@@ -251,13 +282,10 @@ declare %restxq:path("eXgit/repository/tools")
                     resizable: false,
                     buttons: {{
                         "Pull": function() {{
-                            $.ajax({{
-                                url: "/restxq/eXgit/pull?collection=" + eXgit.currentRepository,
-                                dataType: 'text',
-                                success: function (data, status, xhr) {{                            
-                                    $( "#repo-pull-dialog" ).dialog( "close" );
-                                }}
-                            }});
+                            eXgit.pull(
+                                $( "#repo-pull-username" ).val(), 
+                                $( "#repo-pull-password" ).val()
+                            );
                         }},
                         Cancel: function() {{
                             $( this ).dialog( "close" );
@@ -429,18 +457,7 @@ declare function app:commit-form() {
              $( "#repo-commit" )
                 .button()
                 .click(function() {{
-                    $.ajax({{
-                        url: "/restxq/eXgit/commit/files",
-                        data: {{ "collection" : eXgit.currentRepository }},
-                        dataType: 'text',
-                        success: function (data, status, xhr) {{
-                            $( "#repo-commit-files" ).empty().append(data);
-                            $( "#repo-commit-dialog" ).dialog( "open" );
-                        }},
-                        error: function (xhr, textStatus, thrownError) {{
-                            alert("error: cant get status:\n\n"+thrownError);
-                        }}
-                    }});
+                    eXgit.commitFilesView();
                 }});
         </script>
     )
@@ -532,18 +549,7 @@ declare function app:add-form() {
              $( "#repo-add" )
                 .button()
                 .click(function() {{
-                    $.ajax({{
-                        url: "/restxq/eXgit/add/files",
-                        data: {{ "collection" : eXgit.currentRepository }},
-                        dataType: 'text',
-                        success: function (data, status, xhr) {{
-                            $( "#repo-add-files" ).empty().append(data);
-                            $( "#repo-add-dialog" ).dialog( "open" );
-                        }},
-                        error: function (xhr, textStatus, thrownError) {{
-                            alert("error: cant get status:\n\n"+thrownError);
-                        }}
-                    }});
+                    eXgit.addFilesView();
                 }});
         </script>
     )
@@ -607,7 +613,7 @@ declare %restxq:path("eXgit/diff/view")
                     lhs: function(setValue) {{
                         $.ajax({{
                             url: "cat",
-                            data: {{ "collection" : "{$col}", "path" : "{$path}", "direct" : "yes" }},
+                            data: {{ "collection" : "{$col}", "path" : "{$path}" }},
                             dataType: 'text',
                             success: function (data, status, xhr) {{
                         		setValue(data);
@@ -620,7 +626,7 @@ declare %restxq:path("eXgit/diff/view")
             		rhs: function(setValue) {{
                         $.ajax({{
                             url: "cat",
-                            data: {{ "collection" : "{$col}", "path" : "{$path}" }},
+                            data: {{ "collection" : "{$col}", "path" : "{$path}", "direct" : "yes" }},
                             dataType: 'text',
                             success: function (data, status, xhr) {{
                             	setValue(data);

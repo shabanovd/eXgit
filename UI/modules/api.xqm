@@ -56,12 +56,14 @@ declare %restxq:path("eXgit/repository/clone")
 
 declare %restxq:path("eXgit/push")
         %restxq:query-param("collection", "{$uri}", "")
+        %restxq:query-param("username", "{$username}", "")
+        %restxq:query-param("password", "{$password}", "")
         %restxq:GET
-        function api:push($uri as xs:string*) {
+        function api:push($uri as xs:string*, $username as xs:string*, $password as xs:string*) {
        
     <response>{
     if ($uri) then
-        if (git:push($uri)) then
+        if (git:push($uri, $username, $password)) then
             <status>OK</status>
         else
             <status>ERROR</status>
@@ -75,12 +77,14 @@ declare %restxq:path("eXgit/push")
 
 declare %restxq:path("eXgit/pull")
         %restxq:query-param("collection", "{$uri}", "")
+        %restxq:query-param("username", "{$username}", "")
+        %restxq:query-param("password", "{$password}", "")
         %restxq:GET
-        function api:push($uri as xs:string*) {
+        function api:pull($uri as xs:string*, $username as xs:string*, $password as xs:string*) {
        
     <response>{
     if ($uri) then
-        if (git:pull($uri)) then
+        if (git:pull($uri, $username, $password)) then
             <status>OK</status>
         else
             <status>ERROR</status>
