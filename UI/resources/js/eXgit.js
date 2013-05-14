@@ -48,7 +48,7 @@ eXgit = (function() {
         commitFilesView: function() {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/commit/files",
-                data: { 'collection' : currentRepository},
+                data: { 'collection' : eXgit.currentRepository},
                 traditional: 'true',
                 dataType: 'text',
                 success: function(data) {
@@ -63,10 +63,10 @@ eXgit = (function() {
         commitAll: function(message) {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/commitAll",
-                data: { 'collection' : currentRepository, 'message' : message},
+                data: { 'collection' : eXgit.currentRepository, 'message' : message},
                 dataType: 'text',
                 success: function(data) {
-                    eXgit.viewRepository(currentRepository, '');
+                    eXgit.viewRepository(eXgit.currentRepository, '');
                     $( "#repo-commit-dialog" ).dialog( "close" );
                 },
                 error: function (xhr, textStatus, thrownError) {
@@ -77,7 +77,7 @@ eXgit = (function() {
         commit: function(message, paths) {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/commit",
-                data: { 'collection' : currentRepository, 'message' : message, 'files' : paths},
+                data: { 'collection' : eXgit.currentRepository, 'message' : message, 'files' : paths},
                 traditional: 'true',
                 dataType: 'text',
                 success: function(data) {
@@ -92,7 +92,7 @@ eXgit = (function() {
         addFilesView: function() {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/add/files",
-                data: { 'collection' : currentRepository},
+                data: { 'collection' : eXgit.currentRepository},
                 traditional: 'true',
                 dataType: 'text',
                 success: function(data) {
@@ -107,11 +107,11 @@ eXgit = (function() {
         add: function(files) {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/add",
-                data: { 'collection' : currentRepository, 'files' : files},
+                data: { 'collection' : eXgit.currentRepository, 'files' : files},
                 traditional: 'true',
                 dataType: 'text',
                 success: function(data) {
-                    eXgit.viewRepository(currentRepository, '');
+                    eXgit.viewRepository(eXgit.currentRepository, '');
                     $( "#repo-add-dialog" ).dialog( "close" );
                 },
                 error: function (xhr, textStatus, thrownError) {
@@ -122,7 +122,7 @@ eXgit = (function() {
         viewRepositories: function() {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/repositories/view",
-                data: { "collection" : currentRepository},
+                data: { "collection" : eXgit.currentRepository},
                 dataType: 'text',
                 success: function(data) {
                     $("#repos-view").empty().append(data);
@@ -162,7 +162,7 @@ eXgit = (function() {
         push: function(username, password) {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/push",
-                data: { "collection" : currentRepository, "username" : username, "password" : password},
+                data: { "collection" : eXgit.currentRepository, "username" : username, "password" : password},
                 dataType: 'text',
                 success: function(data) {
                     alert(data);
@@ -176,7 +176,7 @@ eXgit = (function() {
         pull: function(username, password) {
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/pull",
-                data: { "collection" : currentRepository, "username" : username, "password" : password},
+                data: { "collection" : eXgit.currentRepository, "username" : username, "password" : password},
                 dataType: 'text',
                 success: function(data) {
                     alert(data);
