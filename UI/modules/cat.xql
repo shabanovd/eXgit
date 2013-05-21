@@ -19,5 +19,6 @@ return
             let $binary := util:binary-doc($uri)
             return response:stream-binary($binary, $mime, ())
         else
-            doc($uri)
+            let $binary := git:cat-working-copy($repo, $path)
+            return response:stream-binary($binary, $mime, ())
     
