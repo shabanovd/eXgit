@@ -468,7 +468,11 @@ declare %restxq:path("eXgit/commit/files")
         %restxq:GET
         function app:commit-files($col as xs:string*) {
     (
-        <caption>Files (?/?)</caption>
+        <caption>
+            Files (?/?) <bt/>
+            <a class="btn btn-small" href="#" id="repo-commit-select-all"><i class="icon-plus-sign"></i> Select all</a>
+            <a class="btn btn-small" href="#" id="repo-commit-deselect-all"><i class="icon-minus-sign"></i> Deselect all</a>
+        </caption>
         ,
         <thead>
             <tr width="100%">
@@ -505,6 +509,20 @@ declare %restxq:path("eXgit/commit/files")
                     checkbox.prop('checked', true);
                 }});
             }});
+             $( "#repo-commit-select-all" )
+                .button()
+                .click(function() {{
+                    $('#repo-commit-files input:checkbox:not(:checked)').each(function(index) {{
+                        $(this).prop('checked', true);
+                    }});
+                }});
+             $( "#repo-commit-deselect-all" )
+                .button()
+                .click(function() {{
+                    $('#repo-commit-files input:checkbox:checked').each(function(index) {{
+                        $(this).prop('checked', false);
+                    }});
+                }});
         </script>
     )
 };
@@ -560,7 +578,11 @@ declare %restxq:path("eXgit/add/files")
         %restxq:GET
         function app:add-files($col as xs:string*) {
     (
-        <caption>Files (?/?)</caption>
+        <caption>
+            Files (?/?) <br/>
+            <a class="btn btn-small" href="#" id="repo-add-select-all"><i class="icon-plus-sign"></i> Select all</a>
+            <a class="btn btn-small" href="#" id="repo-add-deselect-all"><i class="icon-minus-sign"></i> Deselect all</a>
+        </caption>
         ,
         <thead>
             <tr width="100%">
@@ -572,7 +594,7 @@ declare %restxq:path("eXgit/add/files")
         ,
         let $statuses := git:status($col, "", true())
         return
-        for $resource in $statuses/git:resource return
+        for $resource in $statuses/git:resource[@git:status eq "untracked"] return
             let $full-path := $resource/@git:path/xs:string(.)
             return
             <tr gitPath="{$full-path}">
@@ -595,6 +617,20 @@ declare %restxq:path("eXgit/add/files")
                     }}
                 }});
             }});
+             $( "#repo-add-select-all" )
+                .button()
+                .click(function() {{
+                    $('#repo-add-files input:checkbox:not(:checked)').each(function(index) {{
+                        $(this).prop('checked', true);
+                    }});
+                }});
+             $( "#repo-add-deselect-all" )
+                .button()
+                .click(function() {{
+                    $('#repo-add-files input:checkbox:checked').each(function(index) {{
+                        $(this).prop('checked', false);
+                    }});
+                }});
         </script>
     )
 };
