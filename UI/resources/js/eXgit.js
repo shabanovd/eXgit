@@ -31,6 +31,10 @@ eXgit = (function() {
             });
         },
         cloneRepository: function(uri, collection, username, password, data) {
+            // avoid '/' at the end of collection path
+            if (collection.substr(collection.length - 1) == "/") {
+                collection = collection.substr(0, collection.length - 1);
+            }
             $.ajax({
                 url: ""+contextPath+"/restxq/eXgit/repository/clone",
                 data: { "uri" : uri, "collection" : collection, "username" : username, "password" : password, "data" : data},
