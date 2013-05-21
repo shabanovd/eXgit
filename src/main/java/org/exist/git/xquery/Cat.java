@@ -38,6 +38,7 @@ import org.eclipse.jgit.treewalk.TreeWalk;
 import org.eclipse.jgit.treewalk.filter.PathFilter;
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;
+import org.exist.util.io.ResourceInputStream;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
 
@@ -46,31 +47,52 @@ import org.exist.xquery.value.*;
  * @author <a href="mailto:shabanovd@gmail.com">Dmitriy Shabanov</a>
  */
 public class Cat extends BasicFunction {
+    
+    private static final QName CAT = new QName("cat", Module.NAMESPACE_URI, Module.PREFIX);
+    private static final QName CAT_WORKING_COPY = new QName("cat-working-copy", Module.NAMESPACE_URI, Module.PREFIX);
 
-	public final static FunctionSignature signatures[] = { 
+    private static final FunctionParameterSequenceType LOCAL_PATH = 
+            new FunctionParameterSequenceType(
+                "localPath", 
+                Type.STRING, 
+                Cardinality.EXACTLY_ONE, 
+                "Local path"
+            );
+
+    private static final FunctionParameterSequenceType PATH = 
+            new FunctionParameterSequenceType(
+                "Path", 
+                Type.STRING, 
+                Cardinality.EXACTLY_ONE, 
+                "File path"
+            );
+
+    private static final FunctionReturnSequenceType RETURN = 
+            new FunctionReturnSequenceType(
+                Type.BASE64_BINARY, 
+                Cardinality.EXACTLY_ONE, 
+                ""
+            );
+
+    public final static FunctionSignature signatures[] = { 
 		new FunctionSignature(
-			new QName("cat", Module.NAMESPACE_URI, Module.PREFIX), 
+	        CAT, 
 			"", 
 			new SequenceType[] { 
-                new FunctionParameterSequenceType(
-                    "localPath", 
-                    Type.STRING, 
-                    Cardinality.EXACTLY_ONE, 
-                    "Local path"
-                ),
-                new FunctionParameterSequenceType(
-                    "Path", 
-                    Type.STRING, 
-                    Cardinality.EXACTLY_ONE, 
-                    "File path"
-                )
+			    LOCAL_PATH,
+			    PATH
 			}, 
-			new FunctionReturnSequenceType(
-				Type.BASE64_BINARY, 
-				Cardinality.EXACTLY_ONE, 
-				""
-			)
-		)
+			RETURN
+		),
+        new FunctionSignature(
+            CAT_WORKING_COPY, 
+            "", 
+            new SequenceType[] { 
+                LOCAL_PATH,
+                PATH
+            }, 
+            RETURN
+        )
 	};
 
 	public Cat(XQueryContext context, FunctionSignature signature) {
@@ -84,6 +106,18 @@ public class Cat extends BasicFunction {
             String localPath = args[0].getStringValue();
             if (!(localPath.endsWith("/")))
                 localPath += File.separator;
+            
+            String objPath = args[1].getStringValue();
+            
+            if (mySignature.getName() == CAT_WORKING_COPY) {
+                Resource resource = new Resource(localPath + objPath);
+                
+                InputStream is = new ResourceInputStream(resource);;
+                
+                Base64BinaryDocument b64doc = Base64BinaryDocument.getInstance(context, is);
+                return b64doc;
+                
+            }
 
 	        Git git = Git.open(new Resource(localPath), FS);
 	        Repository repository = git.getRepository();
