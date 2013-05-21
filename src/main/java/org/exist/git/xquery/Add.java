@@ -88,7 +88,12 @@ public class Add extends BasicFunction {
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
-			throw new XPathException(this, Module.EXGIT001, e);
+            Throwable cause = e.getCause();
+            if (cause != null) {
+                throw new XPathException(this, Module.EXGIT001, cause.getMessage());
+            }
+
+            throw new XPathException(this, Module.EXGIT001, e);
 		}
 	}
 }

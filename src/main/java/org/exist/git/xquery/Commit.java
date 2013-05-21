@@ -122,6 +122,11 @@ public class Commit extends BasicFunction {
 
 	        return BooleanValue.TRUE;
 		} catch (Throwable e) {
+		    Throwable cause = e.getCause();
+		    if (cause != null) {
+	            throw new XPathException(this, Module.EXGIT001, cause.getMessage());
+		    }
+		    
 			throw new XPathException(this, Module.EXGIT001, e);
 		}
 	}
