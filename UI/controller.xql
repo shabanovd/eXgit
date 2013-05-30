@@ -10,7 +10,10 @@ let $resource :=
     if ($exist:resource eq "logout") then
         session:invalidate()
     else if (sm:is-authenticated() and ends-with($exist:resource, "login.html")) then
-        "index.html"
+        (: if (empty($exist:path)) then
+            "/index.html"
+        else :)
+            "index.html"
     else
         $exist:resource
 (: 
@@ -63,6 +66,11 @@ else if (not(sm:is-authenticated()) and not(ends-with($resource, "login.html")))
         <redirect url="login.html"/>
     </dispatch>
 
+else if ($exist:path eq "") then
+    (: forward root path to index.xql :)
+    <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
+        <redirect url=".{$exist:controller}/index.html"/>
+    </dispatch>
 else if ($exist:path eq "/") then
     (: forward root path to index.xql :)
     <dispatch xmlns="http://exist.sourceforge.net/NS/exist">
