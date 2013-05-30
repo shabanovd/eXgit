@@ -73,7 +73,11 @@ public class Reset extends BasicFunction {
 	    ResetType type;
 	    
 	    String sType = args[1].getStringValue();
-	    if ("HARD".equalsIgnoreCase(sType)) {
+        if ("KEEP".equalsIgnoreCase(sType)) {
+            type = ResetType.KEEP;
+        } else if ("MERGE".equalsIgnoreCase(sType)) {
+            type = ResetType.MERGE;
+        } else if ("HARD".equalsIgnoreCase(sType)) {
 	        type = ResetType.HARD;
 	    } else if ("SOFT".equalsIgnoreCase(sType)) {
             type = ResetType.SOFT;

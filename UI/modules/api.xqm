@@ -63,10 +63,7 @@ declare %restxq:path("eXgit/push")
        
     <response>{
     if ($uri) then
-        if (git:push($uri, $username, $password)) then
-            <status>OK</status>
-        else
-            <status>ERROR</status>
+        git:push($uri, $username, $password)
     else
         (
         <status>ERROR</status>,
@@ -84,10 +81,7 @@ declare %restxq:path("eXgit/pull")
        
     <response>{
     if ($uri) then
-        if (git:pull($uri, $username, $password)) then
-            <status>OK</status>
-        else
-            <status>ERROR</status>
+        git:pull($uri, $username, $password)
     else
         (
         <status>ERROR</status>,
@@ -148,10 +142,27 @@ declare %restxq:path("eXgit/add")
        
     <response>{
     if ($uri) then
-        let $tmp := util:log-system-out($uri)
-        let $tmp := util:log-system-out($files)
-        return
         if (git:add($uri, $files)) then
+            <status>OK</status>
+        else
+            <status>ERROR</status>
+    else
+        (
+        <status>ERROR</status>,
+        <message>No 'collection' parameter. '{$uri}'</message>
+        )
+    }</response>
+};
+
+declare %restxq:path("eXgit/reset")
+        %restxq:query-param("collection", "{$uri}", "")
+        %restxq:query-param("type", "{$type}", "")
+        %restxq:GET
+        function api:reset($uri as xs:string*, $type as xs:string*) {
+       
+    <response>{
+    if ($uri) then
+        if (git:reset($uri, $type)) then
             <status>OK</status>
         else
             <status>ERROR</status>

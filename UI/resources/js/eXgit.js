@@ -230,7 +230,24 @@ eXgit = (function() {
             });
         },
         
-        showLoading: function() {
+        reset: function(resetType) {
+            eXgit.showLoading();
+            $.ajax({
+                url: ""+contextPath+"/restxq/eXgit/reset",
+                data: { "collection" : eXgit.currentRepository, "type" : resetType},
+                dataType: 'text',
+                success: function(data) {
+                    eXgit.hideLoading();
+                    alert(data);
+                },
+                error: function (xhr, textStatus, thrownError) {
+                    eXgit.hideLoading();
+                    alert("error: cant reset repository:\n\n"+thrownError);
+                }
+            });
+        },
+
+showLoading: function() {
             //$('#loading').style.display = "block";
             $('#loading').show();
         },

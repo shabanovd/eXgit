@@ -303,6 +303,7 @@ declare %restxq:path("eXgit/repository/tools")
         </script>
         {app:commit-form()}
         {app:add-form()}
+        {app:reset-buttons()}
     </div>
 };
 
@@ -505,8 +506,6 @@ declare %restxq:path("eXgit/commit/files")
                         var checkbox = $(this).children("td").children("input");
                         checkbox.prop('checked', !checkbox.prop('checked'));
                     }};
-                    var checkbox = $(this).children("td").children("input");
-                    checkbox.prop('checked', true);
                 }});
             }});
              $( "#repo-commit-select-all" )
@@ -633,6 +632,34 @@ declare %restxq:path("eXgit/add/files")
                 }});
         </script>
     )
+};
+
+declare function app:reset-buttons() {
+    <div class="btn-group">
+        <a class="btn btn-small dropdown-toggle" data-toggle="dropdown" href="#" id="repo-reset">
+            <i class="icon-picture"></i> Reset
+            <span class="caret"></span>
+        </a>
+        <ul class="dropdown-menu">
+            <li>
+                <a id="repo-reset-soft" onClick="eXgit.reset('SOFT')">Soft</a>
+            </li>
+            <li>
+                <a id="repo-reset-mixed" onClick="eXgit.reset('MIXED')">Mixed</a>
+            </li>
+            <li>
+                <a id="repo-reset-hard" onClick="eXgit.reset('HARD')">Hard</a>
+            </li>
+            <!--
+            <li>
+                <a id="repo-reset-keep" onClick="eXgit.reset('KEEP')">Keep</a>
+            </li>
+            <li>
+                <a id="repo-reset-merge" onClick="eXgit.reset('MERGE')">Merge</a>
+            </li>
+            -->
+        </ul>
+    </div>
 };
 
 declare %restxq:path("eXgit/diff/view")

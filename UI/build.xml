@@ -1,6 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project default="xar" name="test">
-    <property name="project.version" value="0.1"/>
-    <property name="project.app" value="test"/>
+    <property name="project.version" value="0.2.2"/>
+    <property name="project.app" value="eXgit"/>
     <property name="build.dir" value="build"/>
     <target name="xar">
         <mkdir dir="${build.dir}"/>
