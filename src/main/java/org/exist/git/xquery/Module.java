@@ -38,7 +38,7 @@ import org.exist.xquery.ErrorCodes.ErrorCode;
  */
 public class Module extends AbstractInternalModule {
 
-	public final static String NAMESPACE_URI = "http://exist-db.org/git";
+	public final static String NAMESPACE_URI = "http://exist-db.org/apps/eXgit";
 	public final static String PREFIX = "git";
 	private final static String RELEASED_IN_VERSION = "eXist-2.0";
 	private final static String DESCRIPTION = "Module for interacting with the git repository.";
