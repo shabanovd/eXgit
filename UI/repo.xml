@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <meta xmlns="http://exist-db.org/xquery/repo">
     <description/>
-    <author/>
+    <author>Dmitriy Shabanov</author>
     <website/>
-    <status>alpha</status>
+    <status>beta</status>
     <license>GNU-LGPL</license>
     <copyright>true</copyright>
     <type>application</type>
     <target>eXgit</target>
     <prepare>pre-install.xql</prepare>
-    <finish/>
+    <finish>post-install.xql</finish>
     <permissions user="admin" password="" group="guest" mode="rw-rw-r--"/>
 </meta>
