@@ -22,12 +22,21 @@
 package org.exist.git.xquery;
 
 import static org.exist.git.xquery.Module.FS;
+import static org.exist.git.xquery.Module.NAMESPACE_URI;
+import static org.exist.git.xquery.Module.PREFIX;
 
 import java.io.File;
+import java.util.Map.Entry;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.MergeResult;
+import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.RebaseResult;
+import org.eclipse.jgit.lib.ObjectId;
+import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.exist.dom.QName;
+import org.exist.memtree.MemTreeBuilder;
 import org.exist.util.io.Resource;
 import org.exist.xquery.*;
 import org.exist.xquery.value.*;
@@ -70,7 +79,23 @@ public class Pull extends BasicFunction {
 		)
 	};
 
-	public Pull(XQueryContext context, FunctionSignature signature) {
+    private final static QName PULL = new QName("pull", NAMESPACE_URI, PREFIX);
+    
+    private final static QName MERGE = new QName("merge", NAMESPACE_URI, PREFIX);
+    private final static QName REBASE = new QName("rebase", NAMESPACE_URI, PREFIX);
+
+    private final static QName CHECKOUT_CONFLICT = new QName("checkoutConflict", NAMESPACE_URI, PREFIX);
+
+    private final static QName COMMIT = new QName("commit", NAMESPACE_URI, PREFIX);
+    private final static QName ID = new QName("id", NAMESPACE_URI, PREFIX);
+    private final static QName STATUS = new QName("status", NAMESPACE_URI, PREFIX);
+    private final static QName IS_SUCCESSFUL = new QName("isSuccessful", NAMESPACE_URI, PREFIX);
+    
+    private final static QName FAILING_PATH = new QName("failingPath", NAMESPACE_URI, PREFIX);
+    private final static QName PATH = new QName("path", NAMESPACE_URI, PREFIX);
+    private final static QName REASON = new QName("reason", NAMESPACE_URI, PREFIX);
+
+    public Pull(XQueryContext context, FunctionSignature signature) {
 		super(context, signature);
 	}
 
@@ -84,7 +109,7 @@ public class Pull extends BasicFunction {
 
 	        Git git = Git.open(new Resource(localPath), FS);
 		    
-	        git.pull()
+	        PullResult answer = git.pull()
                .setCredentialsProvider(
                    new UsernamePasswordCredentialsProvider(
                        args[1].getStringValue(), 
@@ -92,9 +117,83 @@ public class Pull extends BasicFunction {
                    )
                )
 	           .call();
+	        
+            MemTreeBuilder builder = getContext().getDocumentBuilder();
+            
+            int nodeNr = builder.startElement(PULL, null);
+            builder.addAttribute(IS_SUCCESSFUL, Boolean.toString( answer.isSuccessful() ));
+            
+            MergeResult merge = answer.getMergeResult();
+            
+            if (merge != null) {
+                builder.startElement(MERGE, null);
+                builder.addAttribute(STATUS, merge.getMergeStatus().toString());
+                builder.addAttribute(IS_SUCCESSFUL, Boolean.toString( merge.getMergeStatus().isSuccessful() ));
+                
+    	        for (ObjectId commit : merge.getMergedCommits()) {
+    	            builder.startElement(COMMIT, null);
+    	            
+    	            builder.addAttribute(ID, commit.name());
+    	            
+    	            builder.endElement();
+    	        }
+                builder.endElement();
+                
+                if (merge.getConflicts() != null) {
+                    for (Entry<String, int[][]> entry : merge.getConflicts().entrySet()) {
+                        builder.startElement(CHECKOUT_CONFLICT, null);
+                        builder.addAttribute(PATH, entry.getKey());
+                        
+                        builder.endElement();
+                    }
+                    
+                }
+                
+                if (merge.getCheckoutConflicts() != null) {
+                    for (String path : merge.getCheckoutConflicts()) {
+                        builder.startElement(CHECKOUT_CONFLICT, null);
+                        builder.addAttribute(PATH, path);
+                        
+                        builder.endElement();
+                    }
+                }
 
-	        return BooleanValue.TRUE;
+
+                if (merge.getFailingPaths() != null) {
+                    for (Entry<String, MergeFailureReason> entry : merge.getFailingPaths().entrySet()) {
+                        builder.startElement(FAILING_PATH, null);
+                        builder.addAttribute(PATH, entry.getKey());
+                        builder.addAttribute(REASON, entry.getValue().name());
+            
+                        builder.endElement();
+                    }
+                }
+            }
+            
+            RebaseResult rebase = answer.getRebaseResult();
+
+            if (rebase != null) {
+                builder.startElement(REBASE, null);
+                builder.addAttribute(STATUS, rebase.getStatus().toString());
+                builder.addAttribute(IS_SUCCESSFUL, Boolean.toString( rebase.getStatus().isSuccessful() ));
+                
+                //rebase.getConflicts()
+                
+                if (rebase.getFailingPaths() != null) {
+                    for (Entry<String, MergeFailureReason> entry : rebase.getFailingPaths().entrySet()) {
+                        builder.startElement(FAILING_PATH, null);
+                        builder.addAttribute(PATH, entry.getKey());
+                        builder.addAttribute(REASON, entry.getValue().name());
+            
+                        builder.endElement();
+                    }
+                }
+                builder.endElement();
+            }
+
+            return builder.getDocument().getNode(nodeNr);
 		} catch (Throwable e) {
+		    e.printStackTrace();
 			throw new XPathException(this, Module.EXGIT001, e);
 		}
 	}
