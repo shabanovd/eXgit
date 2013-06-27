@@ -7,7 +7,7 @@ declare namespace restxq="http://exquery.org/ns/restxq";
 (: import module namespace templates="http://exist-db.org/xquery/templates"; :)
 import module namespace config="eXgit/config" at "config.xqm";
 
-import module namespace git="http://exist-db.org/git";
+import module namespace git="http://exist-db.org/apps/eXgit";
 
 (:~
  : @param $node the HTML node with the class attribute which triggered this call
