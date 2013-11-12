@@ -21,6 +21,8 @@
  */
 package org.exist.git.xquery;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.List;
 import java.util.Map;
 
@@ -38,12 +40,36 @@ import org.exist.xquery.ErrorCodes.ErrorCode;
  */
 public class Module extends AbstractInternalModule {
 
-	public final static String NAMESPACE_URI = "http://exist-db.org/apps/eXgit";
+	public final static String NAMESPACE_URI = "http://exist-db.org/git";
 	public final static String PREFIX = "git";
 	private final static String RELEASED_IN_VERSION = "eXist-2.0";
 	private final static String DESCRIPTION = "Module for interacting with the git repository.";
 	
 	public static final FS_eXistdb FS = new FS_eXistdb();
+	
+	//injection
+	static {
+		try {
+			Class clazz = Class.forName("org.eclipse.jgit.util.FS");
+			
+			Field field = clazz.getDeclaredField("DETECTED");
+			
+			field.setAccessible(true);
+			field.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+			
+			field.set(null, FS);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} catch (NoSuchFieldException e) {
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+	}
 
     public static final ErrorCode EXGIT001 = new DebugErrorCode("EXGIT001", "Git command error.");
 
