@@ -46,6 +46,9 @@ package org.exist.jgit.transport;
 import java.util.Arrays;
 
 import org.eclipse.jgit.errors.UnsupportedCredentialItem;
+import org.eclipse.jgit.transport.CredentialItem;
+import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.transport.URIish;
 
 /**
  * Simple {@link CredentialsProvider} that always uses the same information.
@@ -90,9 +93,6 @@ public class UsernamePasswordCredentialsProvider extends CredentialsProvider {
             else if (i instanceof CredentialItem.Password)
                 continue;
 
-            else if (i instanceof CredentialItem.YesNoType)
-                continue;
-
             else
                 return false;
         }
@@ -110,13 +110,6 @@ public class UsernamePasswordCredentialsProvider extends CredentialsProvider {
             if (i instanceof CredentialItem.Password) {
                 ((CredentialItem.Password) i).setValue(password);
                 continue;
-            }
-            if (i instanceof CredentialItem.StringType) {
-                if (i.getPromptText().equals("Password: ")) { //$NON-NLS-1$
-                    ((CredentialItem.StringType) i).setValue(new String(
-                            password));
-                    continue;
-                }
             }
             if (i instanceof CredentialItem.YesNoType) {
                 ((CredentialItem.YesNoType) i).setValue(true);
