@@ -31,7 +31,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.PushResult;
 import org.eclipse.jgit.transport.RemoteRefUpdate;
 import org.eclipse.jgit.transport.TrackingRefUpdate;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.exist.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.util.io.Resource;

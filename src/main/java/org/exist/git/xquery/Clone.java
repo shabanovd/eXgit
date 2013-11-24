@@ -24,7 +24,7 @@ package org.exist.git.xquery;
 import static org.exist.git.xquery.Module.FS;
 
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.exist.jgit.transport.UsernamePasswordCredentialsProvider;
 
 import org.exist.dom.QName;
 import org.exist.util.io.Resource;

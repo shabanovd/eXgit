@@ -111,6 +111,13 @@ public class UsernamePasswordCredentialsProvider extends CredentialsProvider {
                 ((CredentialItem.Password) i).setValue(password);
                 continue;
             }
+            if (i instanceof CredentialItem.StringType) {
+                if (i.getPromptText().equals("Password: ")) { //$NON-NLS-1$
+                    ((CredentialItem.StringType) i).setValue(new String(
+                            password));
+                    continue;
+                }
+            }
             if (i instanceof CredentialItem.YesNoType) {
                 ((CredentialItem.YesNoType) i).setValue(true);
                 continue;
