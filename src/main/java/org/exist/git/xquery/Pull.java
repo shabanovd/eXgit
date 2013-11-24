@@ -34,7 +34,7 @@ import org.eclipse.jgit.api.PullResult;
 import org.eclipse.jgit.api.RebaseResult;
 import org.eclipse.jgit.lib.ObjectId;
 import org.eclipse.jgit.merge.ResolveMerger.MergeFailureReason;
-import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.exist.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.exist.dom.QName;
 import org.exist.memtree.MemTreeBuilder;
 import org.exist.util.io.Resource;
