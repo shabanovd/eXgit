@@ -18,18 +18,17 @@
     <target name="rebuild" depends="clean,xar"/>
     
     <target name="xar">
-    	<move file="target/${build.jar}" todir="content"/>
+    	<mkdir dir="content"/>
+    	<copy file="target/${build.jar}" todir="content"/>
         <mkdir dir="${build.dir}"/>
         <zip destfile="${build.dir}/${project.app}-${project.version}${git.commit}.xar">
           <fileset dir=".">
-            <include name="*.jar"/>
+            <include name="content/*.jar"/>
             <include name="*.xml"/>
-            <exclude name=".git*"/>
-            <exclude name="*.tmpl"/>
-            <exclude name="*.properties"/>
+            <exclude name="build.xml"/>
+            <exclude name="pom.xml"/>
           </fileset>
         </zip>
-
     </target>
 
     <target name="upload">
