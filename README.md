@@ -4,6 +4,31 @@ eXgit
 
 Module for interacting with the git repository.
 
+Building & Installing
+---------------------
+
+Prerequisites:
+
+- eXist-db >= 2.1
+- Maven > 2
+- Ant > 1.8.0
+
+
+Compile and package with Maven using the command:
+
+	mvn clean package
+	
+The jar files will have been created in /target.
+
+Create an expath package with ant:
+
+	ant
+
+The package will have been created in /build.
+
+Install the package into eXist-db.
+
+
 functions
 ---------
 
