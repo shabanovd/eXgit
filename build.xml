@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project default="all" name="dashboard">
-    <property name="project.version" value="0.2.2"/>
+    <property name="project.version" value="0.2.3"/>
     <property name="project.app" value="eXgit"/>
     <property name="build.dir" value="build"/>
     <property name="build.jar" value="eXgit-0.3.0.jar"/>
