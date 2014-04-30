@@ -1,32 +1,70 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>org.exist-db</groupId>
-  <artifactId>eXgit</artifactId>
-  <version>0.3.0</version>
-  
-  <dependencies>
-    <dependency>
-      <groupId>org.eclipse.jgit</groupId>
-      <artifactId>org.eclipse.jgit</artifactId>
-      <version>3.2.0-SNAPSHOT</version>
-    </dependency>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>org.exist-db</groupId>
+	<artifactId>eXgit</artifactId>
+	<version>0.3.0</version>
 
-    <!-- eXistDB Library -->
-    <dependency>
-      <groupId>org.exist-db</groupId>
-      <artifactId>existdb-core</artifactId>
-      <version>2.1</version>
-    </dependency>
-  </dependencies>
-  
-  <repositories>
-    <repository>
-      <id>jgit-repository</id>
-      <url>http://download.eclipse.org/jgit/maven</url>
-    </repository>
-    <repository>
-      <id>eXistDB</id>
-      <url>https://raw.github.com/eXist-db/mvn-repo/master/</url>
-    </repository>
-  </repositories>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>copy</id>
+						<phase>package</phase>
+						<goals>
+							<goal>copy</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>org.eclipse.jgit</groupId>
+									<artifactId>org.eclipse.jgit</artifactId>
+									<version>3.2.0-SNAPSHOT</version>
+									<type>jar</type>
+								</artifactItem>
+								<artifactItem>
+									<groupId>com.jcraft</groupId>
+									<artifactId>jsch</artifactId>
+									<version>0.1.50</version>
+									<type>jar</type>
+								</artifactItem>
+							</artifactItems>
+							<outputDirectory>${basedir}/content</outputDirectory>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>3.2.0-SNAPSHOT</version>
+		</dependency>
+
+		<!-- eXistDB Library -->
+		<dependency>
+			<groupId>org.exist-db</groupId>
+			<artifactId>existdb-core</artifactId>
+			<version>2.1</version>
+		</dependency>
+	</dependencies>
+
+	<repositories>
+		<repository>
+			<id>jgit-repository</id>
+			<url>http://download.eclipse.org/jgit/maven</url>
+		</repository>
+		<repository>
+			<id>eXistDB</id>
+			<url>https://raw.github.com/eXist-db/mvn-repo/master/</url>
+		</repository>
+	</repositories>
 </project>
