@@ -19,7 +19,11 @@
     
     <target name="xar">
     	<mkdir dir="content"/>
-    	<copy file="target/${build.jar}" todir="content"/>
+    	<copy todir="content">
+    		<fileset dir="target">
+    			<include name="*.jar"/>
+    		</fileset>
+    	</copy>
         <mkdir dir="${build.dir}"/>
         <zip destfile="${build.dir}/${project.app}-${project.version}${git.commit}.xar">
           <fileset dir=".">
