@@ -99,7 +99,7 @@ public class Log extends BasicFunction {
 
                 attribs.addAttribute(NAMESPACE_URI, 
                         "time", PREFIX+":time", 
-                        "CDATA", String.valueOf( commit.getCommitTime() ));
+                        "CDATA", String.valueOf( commit.getCommitTime() * 1000L ));
 
                 builder.startElement(COMMIT_ELEMENT, attribs);
 
